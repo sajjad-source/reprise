@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Logo } from "@/components/logo";
 import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -48,9 +49,7 @@ export default function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border">
         <div className="absolute inset-0 bg-background/80 backdrop-blur-2xl" />
         <div className="relative max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-semibold tracking-tight hover:opacity-80 transition-opacity">
-            Reprise
-          </Link>
+          <Logo />
 
           <div className="hidden md:flex items-center gap-6">
             <Link href="#product" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -519,7 +518,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-sm font-medium text-foreground">Reprise</div>
+          <Logo />
           <div className="flex items-center gap-8 text-sm text-muted-foreground">
             <Link href="/privacy" className="hover:text-foreground transition-colors">
               Privacy

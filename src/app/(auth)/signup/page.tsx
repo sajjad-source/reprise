@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Logo } from "@/components/logo";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -57,16 +58,16 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="flex items-center justify-between p-6">
-        <Link href="/" className="text-lg font-semibold">
-          Reprise
-        </Link>
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          <Link href="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Sign in
-          </Link>
+      {/* Header - matches landing page nav */}
+      <header className="border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+          <Logo />
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <Link href="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Sign in
+            </Link>
+          </div>
         </div>
       </header>
 
