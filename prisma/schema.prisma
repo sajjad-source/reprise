@@ -1,0 +1,243 @@
+// Prisma schema for Reprise - TikTok Content Testing Engine
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?  // Hashed password for email/password auth
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Settings
+  timezone         String  @default("UTC")
+  defaultSpacing   Int     @default(4) // hours between posts
+  niche            String?
+  postingFrequency String? // "daily", "few-times-week", etc.
+
+  // Onboarding
+  onboardingCompleted Boolean @default(false)
+
+  // Relations
+  platformConnections PlatformConnection[]
+  contentAssets       ContentAsset[]
+  experiments         Experiment[]
+  subscription        Subscription?
+  accounts            Account[]
+  sessions            Session[]
+}
+
+// NextAuth Account model for OAuth providers
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// NextAuth Session model
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// NextAuth VerificationToken for email verification
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PlatformConnection {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  platform         String    // "tiktok"
+  platformUserId   String    // TikTok user ID
+  platformUsername String?
+  accessToken      String    @db.Text // encrypted
+  refreshToken     String?   @db.Text // encrypted
+  tokenExpiresAt   DateTime?
+  scopes           String[]  // granted permissions
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relations
+  scheduledPosts   ScheduledPost[]
+
+  @@unique([userId, platform, platformUserId])
+}
+
+model ContentAsset {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // File info
+  fileName    String
+  fileUrl     String   // R2 URL
+  fileSize    Int      // bytes
+  duration    Int?     // seconds
+  thumbnailUrl String?
+
+  // Metadata
+  title       String
+  description String?  @db.Text
+  niche       String?
+  tags        String[]
+
+  status      String   @default("uploaded") // uploaded, processing, ready
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  variants    Variant[]
+  experiments Experiment[]
+}
+
+model Variant {
+  id             String       @id @default(cuid())
+  contentAssetId String
+  contentAsset   ContentAsset @relation(fields: [contentAssetId], references: [id], onDelete: Cascade)
+
+  // Variant content
+  hook           String?      @db.Text // opening hook text
+  caption        String       @db.Text // TikTok description
+  hashtags       String[]
+
+  // Generation info
+  isAiGenerated  Boolean      @default(false)
+  aiPromptUsed   String?      @db.Text
+
+  createdAt      DateTime     @default(now())
+
+  // Relations
+  scheduledPosts ScheduledPost[]
+}
+
+model Experiment {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentAssetId String
+  contentAsset   ContentAsset @relation(fields: [contentAssetId], references: [id], onDelete: Cascade)
+
+  name           String
+  hypothesis     String?      @db.Text // "Testing hook styles"
+  status         String       @default("draft") // draft, scheduled, running, completed, cancelled
+
+  createdAt      DateTime     @default(now())
+  startedAt      DateTime?
+  completedAt    DateTime?
+
+  // Relations
+  scheduledPosts ScheduledPost[]
+  insight        Insight?
+}
+
+model ScheduledPost {
+  id                   String              @id @default(cuid())
+  experimentId         String?
+  experiment           Experiment?         @relation(fields: [experimentId], references: [id], onDelete: SetNull)
+  variantId            String
+  variant              Variant             @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  platformConnectionId String
+  platformConnection   PlatformConnection  @relation(fields: [platformConnectionId], references: [id], onDelete: Cascade)
+
+  scheduledFor         DateTime
+  status               String              @default("queued") // queued, posting, posted, failed, cancelled
+
+  // Post result
+  platformPostId       String?             // TikTok video ID after posting
+  postedAt             DateTime?
+  errorMessage         String?             @db.Text
+  retryCount           Int                 @default(0)
+
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+
+  // Relations
+  metrics              PostMetric[]
+}
+
+model PostMetric {
+  id              String        @id @default(cuid())
+  scheduledPostId String
+  scheduledPost   ScheduledPost @relation(fields: [scheduledPostId], references: [id], onDelete: Cascade)
+
+  // Metrics (from TikTok)
+  views           Int           @default(0)
+  likes           Int           @default(0)
+  comments        Int           @default(0)
+  shares          Int           @default(0)
+  saves           Int           @default(0)
+
+  // Engagement metrics
+  avgWatchTime    Float?        // seconds
+  completionRate  Float?        // 0-1
+
+  // Tracking
+  fetchedAt       DateTime      @default(now())
+
+  @@index([scheduledPostId, fetchedAt])
+}
+
+model Insight {
+  id               String     @id @default(cuid())
+  experimentId     String     @unique
+  experiment       Experiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+
+  winningVariantId String?
+
+  // Plain language insights
+  summary          String     @db.Text // "Hook A outperformed Hook B by 47%"
+  details          Json       // structured insights data
+
+  generatedAt      DateTime   @default(now())
+}
+
+model Subscription {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+  plan                 String   @default("free") // free, starter, pro, scale
+  status               String   @default("active") // active, cancelled, past_due
+
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}

@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Check, Play } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -26,7 +27,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground overflow-hidden">
       {/* Background layers */}
       <div className="fixed inset-0">
         {/* Base grid */}
@@ -36,7 +37,7 @@ export default function LandingPage() {
         <div className="aurora opacity-60" />
 
         {/* Radial gradient overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,black_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_70%)]" />
 
         {/* Beams */}
         <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/20 to-transparent beam" />
@@ -44,24 +45,25 @@ export default function LandingPage() {
       </div>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5">
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-2xl" />
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border">
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-2xl" />
         <div className="relative max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/" className="text-lg font-semibold tracking-tight hover:opacity-80 transition-opacity">
             Reprise
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="#product" className="text-sm text-zinc-400 hover:text-white transition-colors">
+          <div className="hidden md:flex items-center gap-6">
+            <Link href="#product" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Product
             </Link>
-            <Link href="#pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">
+            <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Pricing
             </Link>
-            <Link href="/login" className="text-sm text-zinc-400 hover:text-white transition-colors">
+            <Link href="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Log in
             </Link>
-            <Button size="sm" className="bg-white text-black hover:bg-zinc-200 font-medium" asChild>
+            <ThemeToggle />
+            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium" asChild>
               <Link href="/signup">Get Started</Link>
             </Button>
           </div>
@@ -79,12 +81,12 @@ export default function LandingPage() {
           {mounted && <div className="spotlight left-1/2 top-1/2" />}
 
           {/* Eyebrow */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8 opacity-0 animate-fade-up">
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-border bg-secondary/50 backdrop-blur-sm mb-8 opacity-0 animate-fade-up">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="text-sm text-zinc-300">TikTok content testing engine</span>
+            <span className="text-sm text-muted-foreground">TikTok content testing engine</span>
           </div>
 
           {/* Headline with reveal effect */}
@@ -99,7 +101,7 @@ export default function LandingPage() {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed opacity-0 animate-fade-up animation-delay-300">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed opacity-0 animate-fade-up animation-delay-300">
             Stop guessing which hooks perform. Run controlled experiments,
             get clear insights, and double down on proven patterns.
           </p>
@@ -127,7 +129,7 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          <p className="text-sm text-zinc-600 opacity-0 animate-fade-up animation-delay-500">
+          <p className="text-sm text-muted-foreground opacity-0 animate-fade-up animation-delay-500">
             Free 7-day trial · No credit card required
           </p>
         </div>
@@ -262,11 +264,11 @@ export default function LandingPage() {
               { value: "2.5M+", label: "Views generated", sublabel: "from winning hooks" },
             ].map((stat, i) => (
               <div key={i} className="text-center group cursor-default">
-                <div className="text-6xl font-bold text-white mb-2 group-hover:text-gradient-purple transition-all duration-300">
+                <div className="text-6xl font-bold text-foreground mb-2 group-hover:text-gradient-purple transition-all duration-300">
                   {stat.value}
                 </div>
-                <div className="text-zinc-300 font-medium">{stat.label}</div>
-                <div className="text-sm text-zinc-600">{stat.sublabel}</div>
+                <div className="text-foreground/80 font-medium">{stat.label}</div>
+                <div className="text-sm text-muted-foreground">{stat.sublabel}</div>
               </div>
             ))}
           </div>
@@ -277,13 +279,13 @@ export default function LandingPage() {
       <section id="product" className="py-24 px-6 relative">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm text-zinc-400 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-secondary/50 text-sm text-muted-foreground mb-6">
               How it works
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-white">
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-foreground">
               The testing loop
             </h2>
-            <p className="text-zinc-400 max-w-xl mx-auto text-lg">
+            <p className="text-muted-foreground max-w-xl mx-auto text-lg">
               A simple workflow to find what resonates with your audience.
             </p>
           </div>
@@ -311,7 +313,7 @@ export default function LandingPage() {
             ].map((step, i) => (
               <div
                 key={i}
-                className="group relative rounded-2xl border border-white/10 bg-zinc-900/30 p-8 hover:border-white/20 transition-all duration-500 hover-lift"
+                className="group relative rounded-2xl border border-border bg-card/50 p-8 hover:border-border/80 transition-all duration-500 hover-lift"
               >
                 {/* Hover gradient */}
                 <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
@@ -322,14 +324,14 @@ export default function LandingPage() {
 
                 <div className="relative">
                   <div className={`text-7xl font-bold mb-6 transition-colors duration-300 ${
-                    step.color === "purple" ? "text-zinc-800 group-hover:text-purple-500/30" :
-                    step.color === "blue" ? "text-zinc-800 group-hover:text-blue-500/30" :
-                    "text-zinc-800 group-hover:text-emerald-500/30"
+                    step.color === "purple" ? "text-muted-foreground/40 group-hover:text-purple-500/60" :
+                    step.color === "blue" ? "text-muted-foreground/40 group-hover:text-blue-500/60" :
+                    "text-muted-foreground/40 group-hover:text-emerald-500/60"
                   }`}>
                     {step.num}
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3">{step.title}</h3>
-                  <p className="text-zinc-400 leading-relaxed">
+                  <h3 className="text-xl font-semibold text-foreground mb-3">{step.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
                     {step.desc}
                   </p>
                 </div>
@@ -344,19 +346,19 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm text-zinc-400 mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-secondary/50 text-sm text-muted-foreground mb-6">
                 Features
               </div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                <span className="text-white">Built for creators</span>
+                <span className="text-foreground">Built for creators</span>
                 <br />
-                <span className="text-gradient">who want results</span>
+                <span className="text-gradient-purple">who want results</span>
               </h2>
-              <p className="text-lg text-zinc-400 mb-8 leading-relaxed">
+              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                 Not another scheduler. A testing engine that helps you understand
                 what actually works on TikTok.
               </p>
-              <Button className="bg-white text-black hover:bg-zinc-200 h-12 px-8 font-medium" asChild>
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-8 font-medium" asChild>
                 <Link href="/signup">
                   Start testing free
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -389,16 +391,16 @@ export default function LandingPage() {
               ].map((feature, i) => (
                 <div
                   key={i}
-                  className="group flex gap-4 p-5 rounded-xl border border-white/5 bg-zinc-900/30 hover:bg-zinc-900/50 hover:border-white/10 transition-all duration-300"
+                  className="group flex gap-4 p-5 rounded-xl border border-border bg-card/50 hover:bg-card hover:border-border/80 transition-all duration-300"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center flex-shrink-0 group-hover:bg-zinc-700 transition-colors">
-                    <svg className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0 group-hover:bg-secondary/80 transition-colors">
+                    <svg className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={feature.icon} />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-medium text-white mb-1">{feature.title}</h3>
-                    <p className="text-sm text-zinc-500 leading-relaxed">{feature.desc}</p>
+                    <h3 className="font-medium text-foreground mb-1">{feature.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
                   </div>
                 </div>
               ))}
@@ -411,13 +413,13 @@ export default function LandingPage() {
       <section id="pricing" className="py-24 px-6 relative">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm text-zinc-400 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-secondary/50 text-sm text-muted-foreground mb-6">
               Pricing
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-white">
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-foreground">
               Simple pricing
             </h2>
-            <p className="text-zinc-400 text-lg">
+            <p className="text-muted-foreground text-lg">
               Start free. Upgrade when you need more.
             </p>
           </div>
@@ -451,7 +453,7 @@ export default function LandingPage() {
                 className={`relative rounded-2xl p-6 transition-all duration-300 hover-lift ${
                   plan.highlight
                     ? "border-2 border-purple-500/50 bg-gradient-to-b from-purple-500/10 to-transparent"
-                    : "border border-white/10 bg-zinc-900/30 hover:border-white/20"
+                    : "border border-border bg-card/50 hover:border-border/80"
                 }`}
               >
                 {plan.highlight && (
@@ -460,26 +462,26 @@ export default function LandingPage() {
                   </div>
                 )}
                 <div className="mb-6">
-                  <div className="font-semibold text-white text-lg mb-1">{plan.name}</div>
-                  <div className="text-sm text-zinc-500">{plan.desc}</div>
+                  <div className="font-semibold text-foreground text-lg mb-1">{plan.name}</div>
+                  <div className="text-sm text-muted-foreground">{plan.desc}</div>
                 </div>
                 <div className="mb-6">
-                  <span className="text-5xl font-bold text-white">{plan.price}</span>
-                  <span className="text-zinc-500">/mo</span>
+                  <span className="text-5xl font-bold text-foreground">{plan.price}</span>
+                  <span className="text-muted-foreground">/mo</span>
                 </div>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, j) => (
                     <li key={j} className="flex items-center gap-3 text-sm">
-                      <Check className="w-4 h-4 text-zinc-500" />
-                      <span className="text-zinc-300">{feature}</span>
+                      <Check className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-foreground/80">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <Button
                   className={`w-full h-11 font-medium ${
                     plan.highlight
-                      ? "bg-white text-black hover:bg-zinc-200"
-                      : "bg-zinc-800 hover:bg-zinc-700 text-white"
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                      : "bg-secondary hover:bg-secondary/80 text-foreground"
                   }`}
                   asChild
                 >
@@ -494,42 +496,42 @@ export default function LandingPage() {
       {/* Final CTA */}
       <section className="py-32 px-6 relative overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 via-purple-500/5 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 via-purple-500/5 to-transparent dark:from-purple-500/20 dark:via-purple-500/5" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-500/20 rounded-full blur-[120px]" />
 
         <div className="max-w-3xl mx-auto text-center relative">
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6 text-white">
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6 text-foreground">
             Ready to stop guessing?
           </h2>
-          <p className="text-xl text-zinc-400 mb-10">
+          <p className="text-xl text-muted-foreground mb-10">
             Join creators who are growing with data, not luck.
           </p>
-          <Button size="lg" className="bg-white text-black hover:bg-zinc-200 h-14 px-10 text-base font-medium" asChild>
+          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-10 text-base font-medium" asChild>
             <Link href="/signup">
               Start your free trial
               <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
           </Button>
-          <p className="mt-4 text-zinc-600 text-sm">No credit card required</p>
+          <p className="mt-4 text-muted-foreground text-sm">No credit card required</p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-white/5">
+      <footer className="py-8 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-sm font-medium text-white">Reprise</div>
-          <div className="flex items-center gap-8 text-sm text-zinc-500">
-            <Link href="/privacy" className="hover:text-white transition-colors">
+          <div className="text-sm font-medium text-foreground">Reprise</div>
+          <div className="flex items-center gap-8 text-sm text-muted-foreground">
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
               Privacy
             </Link>
-            <Link href="/terms" className="hover:text-white transition-colors">
+            <Link href="/terms" className="hover:text-foreground transition-colors">
               Terms
             </Link>
-            <Link href="mailto:hello@reprise.so" className="hover:text-white transition-colors">
+            <Link href="mailto:hello@reprise.so" className="hover:text-foreground transition-colors">
               Contact
             </Link>
           </div>
-          <div className="text-sm text-zinc-600">
+          <div className="text-sm text-muted-foreground">
             © {new Date().getFullYear()}
           </div>
         </div>
