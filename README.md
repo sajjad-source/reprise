@@ -28,11 +28,7 @@ A TikTok content testing and experimentation SaaS platform that helps creators s
 
 ## What Didn't Go Well
 
-- **TikTok API Integration**: The full TikTok posting and scheduling integration proved more complex than anticipated. The database schema and UI are ready, but the actual API connection to schedule posts and track metrics wasn't completed in time.
-
-- **Experiment Tracking**: While the variant generation works, the full A/B testing workflow (scheduling variants, collecting performance data, and determining winners) remains incomplete.
-
-- **Time Constraints**: Had to prioritize core features over the complete vision. The analytics dashboard and AI insights features are scaffolded but not fully functional.
+- **Video Content Analysis**: The main challenge was dealing with complex features like analyzing video content to generate more accurate captions. Extracting meaningful context from video to produce relevant, tailored variations proved to be more nuanced than expected.
 
 ## Tech Stack
 
